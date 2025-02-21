@@ -1,71 +1,41 @@
-import { useState } from "react";
-import Column from "../components/Column";
-import { closestCorners, DndContext } from "@dnd-kit/core";
-
-const COLUMNS = [
-  { id: "TODO", title: "To Do" },
-  { id: "IN_PROGRESS", title: "In Progress" },
-  { id: "DONE", title: "Done" },
-];
-
-const INITIAL_TASKS = [
-  {
-    id: "1",
-    title: "Research Project",
-    description: "Gather requirements and create initial documentation",
-    status: "TODO",
-  },
-  {
-    id: "2",
-    title: "Design System",
-    description: "Create component library and design tokens",
-    status: "TODO",
-  },
-  {
-    id: "3",
-    title: "API Integration",
-    description: "Implement REST API endpoints",
-    status: "IN_PROGRESS",
-  },
-  {
-    id: "4",
-    title: "Testing",
-    description: "Write unit tests for core functionality",
-    status: "DONE",
-  },
-];
+import { toast } from "react-toastify";
+import DNDCols from "../components/DNDCols";
+import { useEffect, useState } from "react";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../hooks/useAuth";
 
 const HomePage = () => {
-  const [tasks, setTasks] = useState(INITIAL_TASKS);
+  const [tasks, setTasks] = useState([]);
+  const axiosPublic = useAxiosPublic();
+  const { user } = useAuth();
 
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
+  useEffect(() => {
+    axiosPublic
+      .get(`/task?fireId=${user?.uid}`)
+      .then((res) => setTasks(res.data));
+  }, [axiosPublic, user]);
 
-    if (!over) return;
-
-    const taskId = active.id;
-    const newStatus = over.id;
-
-    setTasks(() =>
-      tasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status: newStatus,
-            }
-          : task
-      )
-    );
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
     const title = form.title.value;
     const description = form.description.value;
 
-    console.log(title, description);
+    const taskData = {
+      title,
+      description,
+      status: "To Do",
+      position: tasks.length + 1,
+      fireId: user.uid,
+    };
+
+    try {
+      await axiosPublic.post("/task", taskData);
+      toast.success("Task Created");
+    } catch (err) {
+      toast.err(err.message);
+    }
   };
 
   return (
@@ -83,27 +53,11 @@ const HomePage = () => {
           className="input input-bordered input-primary"
           placeholder="Description"
         />
-        <button className="btn btn-primary" type="submit">Add Task</button>
+        <button className="btn btn-primary" type="submit">
+          Add Task
+        </button>
       </form>
-
-      <div className="p-4">
-        <div className="flex gap-8">
-          <DndContext
-            collisionDetection={closestCorners}
-            onDragEnd={handleDragEnd}
-          >
-            {COLUMNS.map((column) => {
-              return (
-                <Column
-                  key={column.id}
-                  column={column}
-                  tasks={tasks.filter((task) => task.status === column.id)}
-                />
-              );
-            })}
-          </DndContext>
-        </div>
-      </div>
+      <DNDCols tasks={tasks} setTasks={setTasks} />
     </div>
   );
 };
