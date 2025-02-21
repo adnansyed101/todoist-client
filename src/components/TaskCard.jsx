@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id,
+    id: task._id,
   });
 
   const style = transform
