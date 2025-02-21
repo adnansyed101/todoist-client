@@ -15,7 +15,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Earnify | Sign In";
+    document.title = "Todoist | Sign In";
     window.scrollTo(0, 0);
   }, []);
 
@@ -48,8 +48,7 @@ const SignIn = () => {
           name: user.displayName,
           image: user.photoURL,
           email: user.email,
-          role: "Worker",
-          coin: 10,
+          fireId: user.uid,
         });
         navigate("/");
         toast.success("Login Succesfull.");
