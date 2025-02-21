@@ -71,11 +71,9 @@ const SignIn = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen py-20 px-4 md:px-0 bg-gradient-to-r from-primary to-accent">
-      <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md bg-base-200">
-        <h2 className="text-2xl font-bold text-center">
-          Sign in to Your Account
-        </h2>
+    <div className="signUpInPage">
+      <div className="signUpInPanel">
+        <h2 className="signUpInHeader">Sign in to Your Account</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Email Address */}
           <div>
@@ -87,7 +85,7 @@ const SignIn = () => {
               id="email"
               name="email"
               placeholder="Enter your email"
-              className="input input-bordered input-primary w-full"
+              className="signInUpInput"
               required
             />
           </div>
@@ -101,7 +99,7 @@ const SignIn = () => {
               id="password"
               name="password"
               placeholder="Enter your password"
-              className="input input-bordered input-primary w-full"
+              className="signInUpInput"
               required
             />
           </div>

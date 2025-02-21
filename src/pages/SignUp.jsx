@@ -21,7 +21,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Earnify | Sign Up";
+    document.title = "Todoist | Sign Up";
     window.scrollTo(0, 0);
   }, []);
 
@@ -36,7 +36,6 @@ const SignUp = () => {
     const email = form.email.value;
     const password = form.password.value;
     const verifyPassword = form.verifyPassword.value;
-    const role = form.role.value;
     const image = form.image.value;
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
@@ -56,18 +55,16 @@ const SignUp = () => {
     createNewUser(email, password)
       .then((result) => {
         const user = result.user;
-        setUser(user);
         updateUserProfile({
           displayName: name,
           photoURL: image,
         })
           .then(() => {
-            axiosPublic.post(`/user/${email}`, {
+            axiosPublic.post(`/user/${user.uid}`, {
               name: user.displayName,
               image: image,
               email: email,
-              role: role,
-              coin: role === "Worker" ? 10 : 50,
+              fireId: user.uid,
             });
             toast.success("Account Created Successfully.");
             navigate("/");
@@ -79,6 +76,7 @@ const SignUp = () => {
             setLoading(false);
             navigate("/signUp");
           });
+        setUser(user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -97,15 +95,15 @@ const SignUp = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-50px)] py-20 px-4 md:px-0 bg-gradient-to-r from-primary to-accent">
-      <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md bg-base-200">
-        <h2 className="text-2xl font-bold text-center">Create an Account</h2>
+    <div className="signUpInPage">
+      <div className="signUpInPanel">
+        <h2 className="signUpInHeader">Create an Account</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Photo */}
           <div>
             <label
               htmlFor="photo"
-              className="block text-sm font-medium mb-1 bg-acc"
+              className="block text-sm font-medium mb-1"
             >
               Image URL:
             </label>
@@ -114,7 +112,7 @@ const SignUp = () => {
               type="url"
               id="image"
               name="image"
-              className="input input-bordered input-primary w-full"
+              className="signInUpInput"
             />
           </div>
           {/* User Name */}
@@ -127,7 +125,7 @@ const SignUp = () => {
               id="name"
               name="name"
               placeholder="Enter your name"
-              className="input input-bordered input-primary w-full"
+              className="signInUpInput"
               required
             />
           </div>
@@ -141,7 +139,7 @@ const SignUp = () => {
               id="email"
               name="email"
               placeholder="Enter your email"
-              className="input input-bordered input-primary w-full"
+              className="signInUpInput"
               required
             />
           </div>
@@ -153,7 +151,7 @@ const SignUp = () => {
             >
               Enter Password
             </label>
-            <label className="input input-bordered flex items-center gap-2">
+            <label className="signInUpInput flex items-center gap-2">
               <input
                 name="password"
                 type={showPwd ? "text" : "password"}
@@ -180,7 +178,7 @@ const SignUp = () => {
             >
               Verify Password
             </label>
-            <label className="input input-bordered flex items-center gap-2">
+            <label className="signInUpInput  flex items-center gap-2">
               <input
                 name="verifyPassword"
                 type={showVerifyPwd ? "text" : "password"}
