@@ -9,7 +9,7 @@ export default function TaskColumn({ status, tasks }) {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="w-1/3 bg-gray-100 p-4 rounded shadow-md"
+          className="p-4 rounded shadow-md bg-base-200"
         >
           <h2 className="text-xl font-bold mb-3">{status}</h2>
           {tasks.map((task, index) => (

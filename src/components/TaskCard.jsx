@@ -28,21 +28,18 @@ export default function TaskCard({ task, index }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="p-3 my-2 bg-white shadow-md rounded cursor-grab"
+          className="p-3 my-2 bg-base-100 shadow-md rounded cursor-grab"
         >
           <h3 className="font-semibold">{task.title}</h3>
-          <p className="text-sm text-gray-600">{task.description}</p>
+          <p className="text-sm ">{task.description}</p>
           <div className="flex justify-between mt-2">
             <Link
               to={`/dashboard/updateTask/${task._id}`}
-              className="bg-green-500 text-white px-2 py-1 rounded"
+              className="btn btn-success"
             >
               Update
             </Link>
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
+            <button onClick={handleDelete} className="btn btn-error">
               Delete
             </button>
           </div>

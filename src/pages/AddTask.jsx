@@ -41,25 +41,33 @@ export default function AddTask() {
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-3xl font-bold my-3">Add a New Task</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Task Title"
-          className="p-2 border rounded w-full mb-2"
-          name="title"
-        />
-        <textarea
-          placeholder="Task Description"
-          className="p-2 border rounded w-full mb-2"
-          name="description"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add Task
-        </button>
-      </form>
+      <div className="card bg-base-200 w-1/2 shrink-0 shadow-2xl border">
+        <form onSubmit={handleSubmit} className="card-body">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Task Title</span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              name="title"
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Task Description</span>
+            </label>
+            <textarea
+              className="input input-bordered w-full"
+              name="description"
+            ></textarea>
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Add Task
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

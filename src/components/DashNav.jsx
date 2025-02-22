@@ -11,7 +11,7 @@ const DashNav = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/dashboard/addTask" className="font-semibold text-lg">
+        <NavLink to="/dashboard/addTask" className="font-semibold text-lg active">
           Dashboard
         </NavLink>
       </li>
@@ -26,7 +26,7 @@ const DashNav = () => {
             <FaBars />
           </label>
           <Link to={"/"}>
-            <span className="font-bold text-2xl">Go Home</span>
+            <span className="font-bold text-2xl">Todoist</span>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
