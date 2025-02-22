@@ -2,18 +2,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function AddTask() {
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  const { mutate: createTask } = useMutation({
+  const { mutateAsync: createTask } = useMutation({
     mutationFn: (newTask) => axiosPublic.post("/task", newTask),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["allTasks"] }),
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
@@ -24,13 +26,13 @@ export default function AddTask() {
       title,
       description,
       status: "To Do",
-
       fireId: user.uid,
     };
 
     try {
-      createTask(taskData);
+      await createTask(taskData);
       toast.success("Task Created");
+      navigate("/dashboard/myTask");
     } catch (err) {
       toast.err(err.message);
     }
@@ -44,10 +46,12 @@ export default function AddTask() {
           type="text"
           placeholder="Task Title"
           className="p-2 border rounded w-full mb-2"
+          name="title"
         />
         <textarea
           placeholder="Task Description"
           className="p-2 border rounded w-full mb-2"
+          name="description"
         />
         <button
           type="submit"
