@@ -1,8 +1,37 @@
-# React + Vite
+# Todoist
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully responsive task management application for you to manage your tasks. The task application uses fluid drag and drop action for you too keep track of your tasks. Also you can perform CRUD operations.
 
-Currently, two official plugins are available:
+## [Live Link](https://todoist-1adad.web.app/).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
+
+### Technologies Used
+
+---
+
+- React
+- Express
+- MongoDB
+- Firebase
+
+### Features of the website:
+
+---
+
+- Shows toast on any CRUD operation.
+- Uses firebase for authentication.
+- User can update status using drag and drop feature.
+
+### Dependencies Used:
+
+---
+
+- Axios
+- react-beautiful-dnd
+- React Toastify
+- Tanstack Query
+
+### [Server Link](https://github.com/adnansyed101/todoist-server).
+
+![Homepage](./public/homepage.PNG)
