@@ -34,7 +34,7 @@ export default function AddTask() {
       toast.success("Task Created");
       navigate("/dashboard/myTask");
     } catch (err) {
-      toast.err(err.message);
+      toast.error(err.message);
     }
   };
 

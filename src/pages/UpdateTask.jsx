@@ -39,7 +39,7 @@ const UpdateTask = () => {
       toast.success("Task Updated");
       navigate("/dashboard/myTask");
     } catch (err) {
-      toast.err(err.message);
+      toast.error(err.message);
     }
   };
 
