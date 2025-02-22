@@ -1,27 +1,26 @@
 import { toast } from "react-toastify";
-import DNDCols from "../components/DNDCols";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAuth from "../hooks/useAuth";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const HomePage = () => {
+  const queryClient = useQueryClient();
   const [tasks, setTasks] = useState([]);
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
 
-  const { data, status, refetch } = useQuery({
-    queryKey: ["allTasks"],
+  const { data, status } = useQuery({
+    queryKey: ["allTasks", user?.uid],
     queryFn: async () => {
       const { data } = await axiosPublic.get(`/task?fireId=${user?.uid}`);
       return data;
     },
-    enabled: !!user && !!user?.uid,
   });
 
   const { mutate: createTask } = useMutation({
     mutationFn: (newTask) => axiosPublic.post("/task", newTask),
-    onSuccess: () => refetch(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["allTasks"] }),
   });
 
   useEffect(() => {
@@ -72,7 +71,6 @@ const HomePage = () => {
           Add Task
         </button>
       </form>
-      <DNDCols tasks={tasks} setTasks={setTasks} />
     </div>
   );
 };
