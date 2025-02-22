@@ -49,7 +49,7 @@ export default function MyTasks() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex justify-around p-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         {["To Do", "In Progress", "Done"].map((status) => (
           <TaskColumn
             key={status}
