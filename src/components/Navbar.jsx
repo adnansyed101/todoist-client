@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import NavbarOptions from "./NavbarOptions";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { user } = useAuth();
   const links = (
     <>
       <li>
@@ -10,11 +12,13 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
-      <li>
-        <NavLink to="/dashboard/addTask" className="font-semibold text-lg">
-          Dashboard
-        </NavLink>
-      </li>
+      {user && user?.email && (
+        <li>
+          <NavLink to="/dashboard/addTask" className="font-semibold text-lg">
+            Dashboard
+          </NavLink>
+        </li>
+      )}
     </>
   );
 
