@@ -1,10 +1,24 @@
 import { Draggable } from "@hello-pangea/dnd";
 import axios from "axios";
 import PropTypes from "prop-types";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export default function TaskCard({ task, index }) {
+  const axiosPublic = useAxiosPublic();
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteTask } = useMutation({
+    mutationFn: (taskId) => {
+      return axiosPublic.delete(`/task/${taskId}`);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["allTasks"] }),
+  });
+
   const handleDelete = async () => {
-    await axios.delete(`http://localhost:5000/tasks/${task.id}`);
+    await deleteTask(task._id);
+    toast.warn("Task Deleted.");
   };
 
   const handleUpdate = async () => {
