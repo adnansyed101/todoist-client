@@ -6,6 +6,7 @@ import HomePage from "../pages/HomePage";
 import Dashboard from "../layout/Dashboard";
 import AddTask from "../pages/AddTask";
 import MyTasks from "../pages/MyTasks";
+import UpdateTask from "../pages/UpdateTask";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "myTask",
         element: <MyTasks />,
+      },
+      {
+        path: "updateTask/:taskId",
+        element: <UpdateTask />,
       },
     ],
   },
