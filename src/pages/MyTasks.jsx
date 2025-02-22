@@ -1,19 +1,26 @@
 import { DragDropContext } from "@hello-pangea/dnd";
 import TaskColumn from "../components/TaskColumn";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
+import Loading from "../components/Loading";
 
 export default function MyTasks() {
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
 
-  const { data: tasks = [] } = useQuery({
+  const { data: tasks = [], isLoading } = useQuery({
     queryKey: ["allTasks", user?.uid],
     queryFn: async () => {
       const { data } = await axiosPublic.get(`/task?fireId=${user?.uid}`);
       return data;
+    },
+  });
+
+  const { mutateAsync: updateTaskStatus } = useMutation({
+    mutationFn: ({ taskId, status }) => {
+      return axiosPublic.patch(`/task/${taskId}`, { status });
     },
   });
 
@@ -22,14 +29,23 @@ export default function MyTasks() {
 
     const { destination, draggableId } = result;
 
-    const updatedTasks = [...tasks];
-    const movedTask = updatedTasks.find((task) => task.id === draggableId);
+    const movedTask = tasks.find((task) => task._id === draggableId);
+
     movedTask.status = destination.droppableId;
 
-    await axios.put(`http://localhost:5000/tasks/${movedTask.id}`, {
-      status: movedTask.status,
-    });
+    try {
+      await updateTaskStatus({
+        taskId: movedTask._id,
+        status: destination.droppableId,
+      });
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
