@@ -18,6 +18,11 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/dashboard/addTask" className="font-semibold text-lg">
+          Dashboard
+        </NavLink>
+      </li>
     </>
   );
 
