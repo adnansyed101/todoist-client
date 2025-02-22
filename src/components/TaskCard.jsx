@@ -1,9 +1,9 @@
 import { Draggable } from "@hello-pangea/dnd";
-import axios from "axios";
 import PropTypes from "prop-types";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function TaskCard({ task, index }) {
   const axiosPublic = useAxiosPublic();
@@ -21,15 +21,6 @@ export default function TaskCard({ task, index }) {
     toast.warn("Task Deleted.");
   };
 
-  const handleUpdate = async () => {
-    const newTitle = prompt("Enter new title:", task.title);
-    if (!newTitle) return;
-
-    await axios.put(`http://localhost:5000/tasks/${task.id}`, {
-      title: newTitle,
-    });
-  };
-
   return (
     <Draggable draggableId={task._id} index={index}>
       {(provided) => (
@@ -42,12 +33,12 @@ export default function TaskCard({ task, index }) {
           <h3 className="font-semibold">{task.title}</h3>
           <p className="text-sm text-gray-600">{task.description}</p>
           <div className="flex justify-between mt-2">
-            <button
-              onClick={handleUpdate}
+            <Link
+              to={`/dashboard/updateTask/${task._id}`}
               className="bg-green-500 text-white px-2 py-1 rounded"
             >
               Update
-            </button>
+            </Link>
             <button
               onClick={handleDelete}
               className="bg-red-500 text-white px-2 py-1 rounded"
