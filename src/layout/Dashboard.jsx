@@ -7,7 +7,7 @@ const Dashboard = () => {
       <DashNav />
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
+        <div className="drawer-content p-2">
           {/* Page content here */}
           <Outlet />
           
@@ -18,7 +18,7 @@ const Dashboard = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu bg-base-200 text-base-content min-h-full w-60 p-4">
+          <ul className="menu bg-base-200 min-h-full w-60 p-4 space-y-2">
             {/* Sidebar content here */}
             <li>
               <Link to={"/dashboard/addTask"}>Add Task</Link>
