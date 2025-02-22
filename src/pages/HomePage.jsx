@@ -3,19 +3,34 @@ import DNDCols from "../components/DNDCols";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAuth from "../hooks/useAuth";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
 
-  useEffect(() => {
-    axiosPublic
-      .get(`/task?fireId=${user?.uid}`)
-      .then((res) => setTasks(res.data));
-  }, [axiosPublic, user]);
+  const { data, status, refetch } = useQuery({
+    queryKey: ["allTasks"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get(`/task?fireId=${user?.uid}`);
+      return data;
+    },
+    enabled: !!user && !!user?.uid,
+  });
 
-  const handleSubmit = async (e) => {
+  const { mutate: createTask } = useMutation({
+    mutationFn: (newTask) => axiosPublic.post("/task", newTask),
+    onSuccess: () => refetch(),
+  });
+
+  useEffect(() => {
+    if (status === "success") {
+      setTasks(data);
+    }
+  }, [status, data]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
 
@@ -31,7 +46,7 @@ const HomePage = () => {
     };
 
     try {
-      await axiosPublic.post("/task", taskData);
+      createTask(taskData);
       toast.success("Task Created");
     } catch (err) {
       toast.err(err.message);
